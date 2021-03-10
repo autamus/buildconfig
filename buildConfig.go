@@ -49,7 +49,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = f.WriteString(result.Package.GetName())
+	_, err = f.WriteString(strings.ToLower(result.Package.GetName()))
 	if err != nil {
 		log.Fatal(err)
 	}
