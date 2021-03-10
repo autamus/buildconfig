@@ -2,6 +2,7 @@ package repo
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -11,6 +12,7 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 	if err != nil {
 		return filepaths, err
 	}
+	fmt.Printf("currentCommit: %s\n", currentCommit)
 
 	err = PullBranch(path, mainBranch)
 	if err != nil && err.Error() != "branch already exists" {
@@ -21,6 +23,7 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 	if err != nil {
 		return filepaths, err
 	}
+	fmt.Printf("originalCommit: %s\n", originalCommit)
 
 	diff, err := originalCommit.Patch(currentCommit)
 	if err != nil {
