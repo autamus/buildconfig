@@ -2,6 +2,7 @@ package repo
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 
@@ -111,6 +112,15 @@ func GetOriginalCommit(path string, branchCommit *object.Commit, mainName string
 	if err != nil {
 		return nil, err
 	}
+
+	branches, err := r.Branches()
+	if err != nil {
+		return nil, err
+	}
+	branches.ForEach(func(input *plumbing.Reference) error {
+		fmt.Println(input.Name())
+		return nil
+	})
 
 	mainRefName := plumbing.NewBranchReferenceName(mainName)
 
