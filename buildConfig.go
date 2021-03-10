@@ -32,6 +32,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fmt.Println(filepaths)
+
 	// Get a list of all of the packages in the commit.
 	packages, err := repo.GetPackages(path, packagesPath, filepaths)
 	if err != nil {

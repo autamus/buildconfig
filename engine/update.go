@@ -16,26 +16,28 @@ func findUpdate(packagePath, commitMsg string, packages []parser.Result) (result
 		}
 	}
 
-	path := []parser.Result{}
-	current := packages[0]
-	for {
-		upstreams := reverseDeps[current.Package.GetName()]
-		if len(upstreams) == 0 {
-			return current, nil
-		}
-		for _, entry := range upstreams {
-			if !contains(path, entry.Package.GetName()) {
-				path = append(path, current)
-				current = entry
-				continue
+	if len(packages) > 0 {
+		path := []parser.Result{}
+		current := packages[0]
+		for {
+			upstreams := reverseDeps[current.Package.GetName()]
+			if len(upstreams) == 0 {
+				return current, nil
 			}
+			for _, entry := range upstreams {
+				if !contains(path, entry.Package.GetName()) {
+					path = append(path, current)
+					current = entry
+					continue
+				}
+			}
+			break
 		}
-		break
-	}
 
-	for _, entry := range path {
-		if strings.Contains(commitMsg, strings.ToLower(entry.Package.GetName())) {
-			return entry, nil
+		for _, entry := range path {
+			if strings.Contains(commitMsg, strings.ToLower(entry.Package.GetName())) {
+				return entry, nil
+			}
 		}
 	}
 
