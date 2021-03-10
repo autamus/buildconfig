@@ -18,6 +18,7 @@ COPY . .
 
 # Install required packages for building Binoc.
 RUN apk add --no-cache \
+    git \
     gcc \
     build-base \ 
     binutils \
