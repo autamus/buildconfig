@@ -1,0 +1,17 @@
+name: 'BuildConfig'
+description: 'BuildConfig determines the build target for the Autamus Build System'
+inputs:
+  repository_path:
+    description: 'Location of the Git Repository'
+    required: false
+    default: '/github/workspace/'
+  packages_path:
+    description: 'Relative location of the packages with respect to the Git Repository'
+    required: false
+    default: 'spack'
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/autamus/buildconfig:latest'
+branding:
+  icon: 'activity'
+  color: 'white'

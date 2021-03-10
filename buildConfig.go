@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	parser "github.com/autamus/binoc/repo"
@@ -42,10 +43,30 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s\n", result.Package.GetName())
-
 	version := strings.Join(result.Package.GetLatestVersion(), ".")
 
-	fmt.Printf("%s\n", version)
+	f, err := os.Create("package")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = f.WriteString(result.Package.GetName())
+	if err != nil {
+		log.Fatal(err)
+	}
+	f.Close()
 
+	f, err = os.Create("version")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = f.WriteString(version)
+	if err != nil {
+		log.Fatal(err)
+	}
+	f.Close()
+
+	fmt.Println("[BuildConfig]")
+	fmt.Println()
+	fmt.Printf("Package: %s\n", result.Package.GetName())
+	fmt.Printf("Version: %s\n", version)
 }
