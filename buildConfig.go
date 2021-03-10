@@ -42,7 +42,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(result.Package.GetName())
-	fmt.Println(result.Package.GetLatestVersion())
+	fmt.Printf("%s\n", result.Package.GetName())
+
+	version := strings.Join(result.Package.GetLatestVersion(), ".")
+
+	fmt.Printf("%s\n", version)
 
 }
