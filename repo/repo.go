@@ -2,7 +2,6 @@ package repo
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 )
 
@@ -12,19 +11,16 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 	if err != nil {
 		return filepaths, err
 	}
-	fmt.Println(currentCommit)
 
 	parentCommit, err := currentCommit.Parents().Next()
 	if err != nil {
 		return filepaths, err
 	}
-	fmt.Println(parentCommit)
 
 	originalCommit, err := parentCommit.MergeBase(currentCommit)
 	if err != nil {
 		return filepaths, err
 	}
-	fmt.Println(originalCommit)
 
 	diff, err := originalCommit[0].Patch(currentCommit)
 	if err != nil {
