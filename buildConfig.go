@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// Get a list of all of the packages in the commit.
-	packages, err := repo.GetPackages(path, filepaths)
+	packages, err := repo.GetPackages(path, packagesPath, filepaths)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -9,13 +9,15 @@ import (
 )
 
 // GetPackages returns a slice of parser.Results from the files changed.
-func GetPackages(prefixPath string, filepaths []string) (packages []parser.Result, err error) {
+func GetPackages(prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
 	for _, path := range filepaths {
-		result, err := parser.Parse(filepath.Join(prefixPath, path))
-		if err != nil {
-			return packages, err
+		if strings.Contains(path, packagesPath) {
+			result, err := parser.Parse(filepath.Join(prefixPath, path))
+			if err != nil {
+				return packages, err
+			}
+			packages = append(packages, result)
 		}
-		packages = append(packages, result)
 	}
 	return packages, nil
 }
