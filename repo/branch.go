@@ -106,48 +106,60 @@ func GetCurrentCommit(path string) (commit *object.Commit, err error) {
 }
 
 // GetOriginalCommit returns the founding commit of the given branch.
-func GetOriginalCommit(path string, branchName string, mainName string) (commit *object.Commit, err error) {
+func GetOriginalCommit(path string, branchName string, mainName string) (oldCommit *object.Commit, err error) {
 	r, err := git.PlainOpen(path)
 	if err != nil {
-		return commit, err
+		return nil, err
 	}
 
-	currentRef, err := r.Head()
+	branchRefName := plumbing.NewBranchReferenceName(branchName)
+	mainRefName := plumbing.NewBranchReferenceName(mainName)
+
+	branchRef, err := r.Storer.Reference(branchRefName)
 	if err != nil {
-		return commit, err
+		return nil, err
 	}
 
-	currentCommit, err := r.CommitObject(currentRef.Hash())
+	mainRef, err := r.Storer.Reference(mainRefName)
 	if err != nil {
-		return commit, err
+		return nil, err
 	}
 
-	err = SwitchBranch(path, mainName)
+	branchCommit, err := r.CommitObject(branchRef.Hash())
 	if err != nil {
-		return commit, err
+		return nil, err
+	}
+
+	mainCommit, err := r.CommitObject(mainRef.Hash())
+	if err != nil {
+		return nil, err
 	}
 
 	gitLog, err := r.Log(&git.LogOptions{})
 	if err != nil {
-		return commit, err
+		return oldCommit, err
 	}
 
-	err = SwitchBranch(path, branchName)
+	err = gitLog.ForEach(func(commit *object.Commit) (err error) {
+		isBranchParent, err := commit.IsAncestor(branchCommit)
+		if err != nil {
+			return err
+		}
+		isMainParent, err := commit.IsAncestor(mainCommit)
+		if err != nil {
+			return err
+		}
+		if isBranchParent && !isMainParent {
+			oldCommit, err = commit.Parents().Next()
+			return err
+		}
+		return nil
+	})
 	if err != nil {
-		return commit, err
+		return oldCommit, err
 	}
-
-	for {
-		commit, err = gitLog.Next()
-		if err != nil {
-			return commit, err
-		}
-		isParent, err := commit.IsAncestor(currentCommit)
-		if err != nil {
-			return commit, err
-		}
-		if isParent {
-			return commit, nil
-		}
+	if oldCommit == nil {
+		return oldCommit, errors.New("no commit found")
 	}
+	return oldCommit, nil
 }

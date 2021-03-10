@@ -2,7 +2,6 @@ package repo
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 )
 
@@ -10,9 +9,8 @@ import (
 func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string, err error) {
 	currentCommit, err := GetCurrentCommit(path)
 	if err != nil {
-		return filepaths, nil
+		return filepaths, err
 	}
-	fmt.Println(currentCommit.String())
 
 	err = PullBranch(path, mainBranch)
 	if err != nil && err.Error() != "branch already exists" {
@@ -21,9 +19,8 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 
 	originalCommit, err := GetOriginalCommit(path, currentBranch, mainBranch)
 	if err != nil {
-		return filepaths, nil
+		return filepaths, err
 	}
-	fmt.Println(originalCommit.String())
 
 	diff, err := originalCommit.Patch(currentCommit)
 	if err != nil {
@@ -35,7 +32,6 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 	if err != nil {
 		return filepaths, err
 	}
-	fmt.Println(buf.String())
 
 	lines := strings.Split(buf.String(), "\n")
 	for _, line := range lines {
