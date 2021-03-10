@@ -19,7 +19,7 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 		return filepaths, err
 	}
 
-	originalCommit, err := GetOriginalCommit(path, currentBranch, mainBranch)
+	originalCommit, err := GetOriginalCommit(path, currentCommit, mainBranch)
 	if err != nil {
 		return filepaths, err
 	}

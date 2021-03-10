@@ -106,26 +106,15 @@ func GetCurrentCommit(path string) (commit *object.Commit, err error) {
 }
 
 // GetOriginalCommit returns the founding commit of the given branch.
-func GetOriginalCommit(path string, branchName string, mainName string) (oldCommit *object.Commit, err error) {
+func GetOriginalCommit(path string, branchCommit *object.Commit, mainName string) (oldCommit *object.Commit, err error) {
 	r, err := git.PlainOpen(path)
 	if err != nil {
 		return nil, err
 	}
 
-	branchRefName := plumbing.NewBranchReferenceName(branchName)
 	mainRefName := plumbing.NewBranchReferenceName(mainName)
 
-	branchRef, err := r.Storer.Reference(branchRefName)
-	if err != nil {
-		return nil, err
-	}
-
 	mainRef, err := r.Storer.Reference(mainRefName)
-	if err != nil {
-		return nil, err
-	}
-
-	branchCommit, err := r.CommitObject(branchRef.Hash())
 	if err != nil {
 		return nil, err
 	}
