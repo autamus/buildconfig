@@ -20,15 +20,11 @@ func main() {
 	path := config.Global.Repository.Path
 	packagesPath := config.Global.Packages.Path
 	mainBranch := config.Global.Repository.DefaultBranch
-	fmt.Println(path)
-	fmt.Println(packagesPath)
-	fmt.Println(mainBranch)
 
 	currentBranch, err := repo.GetBranchName(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("currentBranch: %s\n", currentBranch)
 
 	// Get a list of all of the changed files in the commit.
 	filepaths, err := repo.GetChangedFiles(path, currentBranch, mainBranch)
