@@ -31,15 +31,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(filepaths)
 
 	// Get a list of all of the packages in the commit.
 	packages, err := repo.GetPackages(path, packagesPath, filepaths)
 	if err != nil {
 		log.Fatal(err)
-	}
-	for _, p := range packages {
-		fmt.Println(p.Package.GetName())
 	}
 
 	result, err := engine.FindTarget(path, packagesPath, packages)
@@ -48,12 +44,13 @@ func main() {
 	}
 
 	version := strings.Join(result.Package.GetLatestVersion(), ".")
+	name := engine.ToHyphenCase(result.Package.GetName())
 
 	f, err := os.Create("package")
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = f.WriteString(strings.ToLower(result.Package.GetName()))
+	_, err = f.WriteString(name)
 	if err != nil {
 		log.Fatal(err)
 	}
