@@ -38,6 +38,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	for _, p := range packages {
+		fmt.Println(p.Package.GetName())
+	}
 
 	result, err := engine.FindTarget(path, packagesPath, packages)
 	if err != nil {

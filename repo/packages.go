@@ -13,10 +13,12 @@ func GetPackages(prefixPath, packagesPath string, filepaths []string) (packages 
 	for _, path := range filepaths {
 		if strings.Contains(path, packagesPath) {
 			result, err := parser.Parse(filepath.Join(prefixPath, path))
-			if err != nil {
+			if err != nil && err.Error() != "not a valid package format" {
 				return packages, err
 			}
-			packages = append(packages, result)
+			if err == nil {
+				packages = append(packages, result)
+			}
 		}
 	}
 	return packages, nil
