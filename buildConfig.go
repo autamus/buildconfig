@@ -44,6 +44,9 @@ func main() {
 	}
 
 	version := strings.Join(result.Package.GetLatestVersion(), ".")
+	if version == "" {
+		version = "latest"
+	}
 	name := engine.ToHyphenCase(result.Package.GetName())
 
 	f, err := os.Create("package")
