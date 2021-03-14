@@ -10,9 +10,6 @@ WORKDIR /app
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
-# Add Spack Built Packages to PATH
-ENV PATH=/opt/view/bin:/opt/spack/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
@@ -20,10 +17,10 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build -o buildconfig .
+RUN CGO_ENABLED=0 go build -o buildconfig .
 
 # Start again with minimal envoirnment.
-FROM alpine
+FROM ubuntu:latest
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
