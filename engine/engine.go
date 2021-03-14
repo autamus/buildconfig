@@ -18,7 +18,7 @@ func FindTarget(path, packagesPath string, packages []parser.Result) (result par
 
 	switch {
 	case strings.Contains(commitMsg, "rebuild"):
-		result, err = verifyRebuild(packagesPath, commitMsg, packages)
+		result, err = verifyRebuild(path, packagesPath, commitMsg, packages)
 		if err != nil {
 			return result, err
 		}

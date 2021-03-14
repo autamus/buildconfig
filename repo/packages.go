@@ -29,9 +29,12 @@ func FindAndParse(path, name string) (output parser.Result, err error) {
 	err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		dir := strings.ToLower(filepath.Base(filepath.Dir(path)))
 		if dir == strings.ToLower(name) {
-			output, err = parser.Parse(path)
-			if err != nil {
+			result, err := parser.Parse(path)
+			if err != nil && err.Error() != "not a valid package format" {
 				return err
+			}
+			if err == nil {
+				output = result
 			}
 		}
 		return nil
