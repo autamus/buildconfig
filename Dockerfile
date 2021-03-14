@@ -1,5 +1,5 @@
 # Start from the latest golang base image
-FROM golang:alpine as builder
+FROM ghcr.io/autamus/go:latest as builder
 
 # Add Maintainer Info
 LABEL maintainer="Alec Scott <alecbcs@github.com>"
@@ -15,14 +15,6 @@ RUN go mod download
 
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
-
-# Install required packages for building Binoc.
-RUN apk add --no-cache \
-    gcc \
-    build-base \ 
-    binutils \
-    musl-dev \
-    binutils-gold
 
 # Build the Go app
 RUN go build -o buildconfig .
