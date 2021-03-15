@@ -46,10 +46,10 @@ github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239 h1:kFOfPq6dUM1hTo
 github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239/go.mod h1:2FmKhYUyUczH0OGQWaF5ceTx0UBShxjsH6f8oGKYe2c=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPdPJAN/hZIm0C4OItdklCFmMRWYpio=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
-github.com/autamus/binoc v0.0.7-0.20210313074930-3edbd7760bfd h1:B/S3Xb9KOlKSA3y4cGd/tPoK5q5M3hFxp/lD2iK2jBc=
-github.com/autamus/binoc v0.0.7-0.20210313074930-3edbd7760bfd/go.mod h1:jqwgDBWvwrj8KUTi6YEhU+sil0IoNXfIf+yOnJt7ndM=
-github.com/autamus/go-parspack v0.1.4 h1:DS27G/KT9rfLkX2DuhNMRnZDze9M94LIQhpwy4Gq9Xo=
-github.com/autamus/go-parspack v0.1.4/go.mod h1:9GMnKPJcx/cNUCYR5JOOqb1+hiNb/JM9POUluJVT40o=
+github.com/autamus/binoc v0.0.9 h1:CKqEdil1NERMyqeoCitLgjvew/ncdXTE55N2wq6k03s=
+github.com/autamus/binoc v0.0.9/go.mod h1:SKTK+zwLIZ/mt/3X7cl5jZzPifcLmnmnkgh71AasekA=
+github.com/autamus/go-parspack v0.1.5-0.20210315165337-09f1c7e57fc1 h1:TC6761OTMI0f1PUavwboPGiSY5bNArzpWQiY8Yay6vA=
+github.com/autamus/go-parspack v0.1.5-0.20210315165337-09f1c7e57fc1/go.mod h1:9GMnKPJcx/cNUCYR5JOOqb1+hiNb/JM9POUluJVT40o=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
