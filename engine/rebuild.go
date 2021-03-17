@@ -18,12 +18,12 @@ func verifyRebuild(path, packagesPath, commitMsg string, packages []parser.Resul
 			break
 		}
 	}
-	if len(words) <= i+1 {
+	if len(words) <= i {
 		return result, errors.New("could not find package to rebuild")
 	}
 
 	absPath := filepath.Join(path, packagesPath)
-	target, err := repo.FindAndParse(absPath, words[i+1])
+	target, err := repo.FindAndParse(absPath, words[i])
 	if err != nil {
 		return result, err
 	}
