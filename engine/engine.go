@@ -19,7 +19,7 @@ func GetAllPackageBuilds(changed []parser.Result, packageDeps map[string][]strin
 		// Deqeue current after adding to map.
 		packages = packages[1:]
 		// Append all reverse dependencies to packages queue.
-		packages = append(packages, packageDeps[currentPack]...)
+		packages = append(packages, packageDeps[ToHyphenCase(currentPack)]...)
 	}
 	return result
 }
