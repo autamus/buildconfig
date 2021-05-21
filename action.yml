@@ -9,6 +9,10 @@ inputs:
     description: 'Relative location of the packages with respect to the Git Repository'
     required: false
     default: 'spack'
+  containers_path:
+    description: 'Relative location of the containers with respect to the Git Repository'
+    required: false
+    default: 'containers'
   parsers_loaded:
     description: 'Similar to Binoc which parsers to use on the repository seperated by commas.'
     default: 'spack'
