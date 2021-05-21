@@ -8,8 +8,8 @@ import (
 	parser "github.com/autamus/binoc/repo"
 )
 
-// GetPackages returns a slice of parser.Results from the files changed.
-func GetPackages(prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
+// GetChangedPackages returns a slice of parser.Results from the files changed.
+func GetChangedPackages(prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
 	for _, path := range filepaths {
 		if strings.Contains(path, packagesPath) {
 			result, err := parser.Parse(filepath.Join(prefixPath, path))

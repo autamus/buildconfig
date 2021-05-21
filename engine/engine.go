@@ -1,54 +1,25 @@
 package engine
 
 import (
-	"strings"
-
 	parser "github.com/autamus/binoc/repo"
-	"github.com/go-git/go-git/v5"
 )
 
-// FindTarget attempts to find the target of a build.
-func FindTarget(path, packagesPath string, packages []parser.Result) (result parser.Result, err error) {
-	commitMsg, err := getCommitMsg(path)
-	if err != nil {
-		return result, err
+func GetAllPackageBuilds(changed []parser.Result, packageDeps map[string][]string) (result map[string]bool) {
+	result = make(map[string]bool)
+	packages := []string{}
+
+	for _, pack := range changed {
+		packages = append(packages, pack.Package.GetName())
 	}
 
-	commitMsg = strings.ToLower(commitMsg)
+	for len(packages) > 0 {
+		currentPack := packages[0]
+		result[ToHyphenCase(currentPack)] = true
 
-	switch {
-	case strings.Contains(commitMsg, "rebuild"):
-		result, err = verifyRebuild(path, packagesPath, commitMsg, packages)
-		if err != nil {
-			return result, err
-		}
-		break
-
-	default:
-		result, err = findUpdate(packagesPath, commitMsg, packages)
-		if err != nil {
-			return result, err
-		}
+		// Deqeue current after adding to map.
+		packages = packages[1:]
+		// Append all reverse dependencies to packages queue.
+		packages = append(packages, packageDeps[currentPack]...)
 	}
-
-	return result, nil
-}
-
-func getCommitMsg(path string) (result string, err error) {
-	r, err := git.PlainOpen(path)
-	if err != nil {
-		return result, err
-	}
-
-	ref, err := r.Head()
-	if err != nil {
-		return result, err
-	}
-
-	commit, err := r.CommitObject(ref.Hash())
-	if err != nil {
-		return result, err
-	}
-
-	return commit.Message, nil
+	return result
 }

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	parser "github.com/autamus/binoc/repo"
@@ -19,6 +19,7 @@ func main() {
 	// Set inital values for Repository
 	path := config.Global.Repository.Path
 	packagesPath := config.Global.Packages.Path
+	containersPath := config.Global.Containers.Path
 	mainBranch := config.Global.Repository.DefaultBranch
 
 	currentBranch, err := repo.GetBranchName(path)
@@ -32,45 +33,52 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Get a list of all of the packages in the commit.
-	packages, err := repo.GetPackages(path, packagesPath, filepaths)
+	// Get a list of all of the containers directly changed in the commit.
+	containers, err := repo.GetChangedContainers(path, containersPath, filepaths)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	result, err := engine.FindTarget(path, packagesPath, packages)
+	// Get a list of all of the packages modified in the commit.
+	changedPackages, err := repo.GetChangedPackages(path, packagesPath, filepaths)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	version := strings.Join(result.Package.GetLatestVersion(), ".")
-	if version == "" {
-		version = "latest"
-	}
-	name := engine.ToHyphenCase(result.Package.GetName())
+	if len(changedPackages) > 0 {
+		// Build a map of packages (values) that rely on a package (key).
+		reversePackageDeps, err := repo.IndexReverseDependencies(path, packagesPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Build a map of containers (values) that rely on a package (key).
+		packageContainerDeps, err := repo.IndexPackageContainerDeps(path, containersPath)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	f, err := os.Create("package")
-	if err != nil {
-		log.Fatal(err)
+		packages := engine.GetAllPackageBuilds(changedPackages, reversePackageDeps)
+		for app := range packages {
+			for _, container := range packageContainerDeps[app] {
+				containers[container] = true
+			}
+		}
 	}
-	_, err = f.WriteString(name)
-	if err != nil {
-		log.Fatal(err)
-	}
-	f.Close()
 
-	f, err = os.Create("version")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = f.WriteString(version)
-	if err != nil {
-		log.Fatal(err)
-	}
-	f.Close()
+	// Initialize list for keys of containers
+	output := make([]string, 0, len(containers))
 
+	// Print BuildConfig Report
 	fmt.Println("[BuildConfig]")
+	fmt.Printf("v%s\n", config.Global.General.Version)
 	fmt.Println()
-	fmt.Printf("Package: %s\n", result.Package.GetName())
-	fmt.Printf("Version: %s\n", version)
+	fmt.Printf("Containers:\n")
+	for container := range containers {
+		fmt.Printf("--> %s\n", container)
+		output = append(output, container)
+	}
+	// Convert results list into JSON
+	jsonOutput, _ := json.Marshal(output)
+	fmt.Println()
+	fmt.Printf("::set-output name=matrix::%s\n", string(jsonOutput))
 }

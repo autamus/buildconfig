@@ -48,7 +48,7 @@ func init() {
 
 func defaultConfig() {
 	Global.General.Version = "0.0.1"
-	Global.Containers.Path = "containers"
+	Global.Containers.Path = "containers/"
 	Global.Packages.Path = "spack/"
 	Global.Repository.Path = "."
 	Global.Repository.DefaultBranch = "main"
