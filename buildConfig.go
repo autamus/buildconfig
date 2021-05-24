@@ -83,7 +83,7 @@ func main() {
 		output = append(output, container)
 	}
 
-	if isPR {
+	if isPR && config.Global.Git.Token != "" {
 		// Grab the current PR number.
 		pr, err := repo.PrGetNumber(os.Getenv("GITHUB_REF"))
 		if err != nil {
@@ -99,9 +99,12 @@ func main() {
 			repo.PrAddComment(path, config.Global.Git.Token, pr, comment)
 		}
 		if len(containers) == 0 && len(changedPackages) == 0 {
-			repo.PrAddLabel(path, config.Global.Git.Token, pr, "docs")
+			err = repo.PrAddLabel(path, config.Global.Git.Token, pr, "docs")
 		} else {
-			repo.PrAddLabel(path, config.Global.Git.Token, pr, "build")
+			err = repo.PrAddLabel(path, config.Global.Git.Token, pr, "build")
+		}
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 	// Convert results list into JSON

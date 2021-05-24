@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	binoc "github.com/autamus/binoc/repo"
 	"gopkg.in/yaml.v2"
@@ -60,6 +61,11 @@ func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[st
 
 			// Add container as dependency of package.
 			for _, spec := range container.Spack.Specs {
+				// Record the end of the depedency name versus version/variant info.
+				end := strings.IndexFunc(spec, versend)
+				if end > 0 {
+					spec = spec[:end]
+				}
 				result[spec] = append(result[spec], containerName)
 			}
 		}
@@ -67,4 +73,14 @@ func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[st
 	})
 
 	return result, err
+}
+
+// versend returns true at the end of the name of a dependency
+func versend(input rune) bool {
+	for _, c := range []rune{'@', '~', '+'} {
+		if input == c {
+			return true
+		}
+	}
+	return false
 }
