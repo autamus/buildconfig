@@ -26,6 +26,8 @@ func main() {
 	// Check if the current run is a PR
 	prVal, prExists := os.LookupEnv("GITHUB_EVENT_NAME")
 	isPR := prExists && prVal == "pull_request"
+	fmt.Printf("isPR: %t\n", isPR)
+	fmt.Println(prVal)
 
 	currentBranch, err := repo.GetBranchName(path)
 	if err != nil {
