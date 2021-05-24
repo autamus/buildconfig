@@ -11,7 +11,7 @@ import (
 
 func PrGetNumber(ref string) (pr int, err error) {
 	prString := filepath.Base(filepath.Dir(ref))
-	return strconv.Atoi(prString[1:])
+	return strconv.Atoi(prString)
 }
 
 func PrAddComment(path, gitToken string, pr int, comment string) (err error) {

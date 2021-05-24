@@ -20,10 +20,13 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=0 go build -o buildconfig .
+RUN go build -o buildconfig .
 
 # Start again with minimal envoirnment.
 FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install -y ca-certificates
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
