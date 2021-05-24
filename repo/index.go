@@ -77,7 +77,7 @@ func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[st
 
 // versend returns true at the end of the name of a dependency
 func versend(input rune) bool {
-	for _, c := range []rune{'@', '~', '+'} {
+	for _, c := range []rune{'@', '~', '+', '%'} {
 		if input == c {
 			return true
 		}
