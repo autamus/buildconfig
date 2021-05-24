@@ -89,15 +89,21 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		fmt.Printf("[PR %d Detected]\n", pr)
 		// Check if packages were changed but resulted in no
 		// containers being marked for an update
 		if len(containers) == 0 && len(changedPackages) > 0 {
+			fmt.Println("Writing Comment for Missing Container Environment...")
 			comment := "Although a package changed, no coorisponding " +
 				"containers were found to build." +
 				" Please make sure to include a `spack.yaml` environment file" +
 				" in the `containers/` directory."
-			repo.PrAddComment(path, config.Global.Git.Token, pr, comment)
+			err = repo.PrAddComment(path, config.Global.Git.Token, pr, comment)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
+		fmt.Println("Adding Label...")
 		if len(containers) == 0 && len(changedPackages) == 0 {
 			err = repo.PrAddLabel(path, config.Global.Git.Token, pr, "docs")
 		} else {
