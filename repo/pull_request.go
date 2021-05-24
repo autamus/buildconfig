@@ -28,12 +28,12 @@ func PrAddComment(path, gitToken string, pr int, comment string) (err error) {
 		return err
 	}
 
-	_, _, err = client.PullRequests.CreateComment(
+	_, _, err = client.Issues.CreateComment(
 		ctx,
 		repoOwner,
 		repoName,
 		pr,
-		&github.PullRequestComment{
+		&github.IssueComment{
 			Body: &comment,
 		})
 
