@@ -9,6 +9,7 @@ import (
 // Config defines the configuration struct for importing settings from ENV Variables
 type Config struct {
 	General    general
+	Git        git
 	Packages   packages
 	Containers containers
 	Repository repository
@@ -34,6 +35,10 @@ type repository struct {
 
 type parsers struct {
 	Loaded string
+}
+
+type git struct {
+	Token string
 }
 
 var (

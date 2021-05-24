@@ -2,7 +2,10 @@ package repo
 
 import (
 	"bytes"
+	"path/filepath"
 	"strings"
+
+	"github.com/go-git/go-git/v5"
 )
 
 // GetChangedFiles returns all of the changed files
@@ -42,4 +45,23 @@ func GetChangedFiles(path, currentBranch, mainBranch string) (filepaths []string
 	}
 
 	return filepaths, nil
+}
+
+func getURL(path string) (url string, err error) {
+	r, err := git.PlainOpen(path)
+	if err != nil {
+		return url, err
+	}
+	remotes, err := r.Remotes()
+	return remotes[0].Config().URLs[0], err
+}
+
+func getOwnerName(path string) (repoOwner, repoName string, err error) {
+	url, err := getURL(path)
+	if err != nil {
+		return repoOwner, repoName, err
+	}
+	repoName = strings.TrimSuffix(filepath.Base(url), filepath.Ext(url))
+	repoOwner = filepath.Base(filepath.Dir(url))
+	return repoOwner, repoName, nil
 }

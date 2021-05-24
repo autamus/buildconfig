@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	parser "github.com/autamus/binoc/repo"
@@ -21,6 +22,10 @@ func main() {
 	packagesPath := config.Global.Packages.Path
 	containersPath := config.Global.Containers.Path
 	mainBranch := config.Global.Repository.DefaultBranch
+
+	// Check if the current run is a PR
+	prVal, prExists := os.LookupEnv("GITHUB_EVENT_NAME")
+	isPR := prExists && prVal == "pull_request"
 
 	currentBranch, err := repo.GetBranchName(path)
 	if err != nil {
@@ -76,6 +81,28 @@ func main() {
 	for container := range containers {
 		fmt.Printf("--> %s\n", container)
 		output = append(output, container)
+	}
+
+	if isPR {
+		// Grab the current PR number.
+		pr, err := repo.PrGetNumber(os.Getenv("GITHUB_REF"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Check if packages were changed but resulted in no
+		// containers being marked for an update
+		if len(containers) == 0 && len(changedPackages) > 0 {
+			comment := "Although a package changed, no coorisponding " +
+				"containers were found to build." +
+				" Please make sure to include a `spack.yaml` environment file" +
+				" in the `containers/` directory."
+			repo.PrAddComment(path, config.Global.Git.Token, pr, comment)
+		}
+		if len(containers) == 0 && len(changedPackages) == 0 {
+			repo.PrAddLabel(path, config.Global.Git.Token, pr, "docs")
+		} else {
+			repo.PrAddLabel(path, config.Global.Git.Token, pr, "build")
+		}
 	}
 	// Convert results list into JSON
 	jsonOutput, _ := json.Marshal(output)

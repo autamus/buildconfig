@@ -17,6 +17,9 @@ inputs:
     description: 'Similar to Binoc which parsers to use on the repository seperated by commas.'
     default: 'spack'
     required: false
+  git_token:
+    description: 'Allow BuildConfig to Tag Pull Requests.'
+    required: true
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/autamus/buildconfig:latest'
