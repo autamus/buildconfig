@@ -52,7 +52,7 @@ func init() {
 }
 
 func defaultConfig() {
-	Global.General.Version = "0.1.1"
+	Global.General.Version = "0.1.2"
 	Global.Containers.Path = "containers/"
 	Global.Packages.Path = "spack/"
 	Global.Repository.Path = "."
