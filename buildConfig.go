@@ -74,8 +74,16 @@ func main() {
 	output := make([]string, 0, len(containers))
 
 	// Print BuildConfig Report
-	fmt.Println("[BuildConfig]")
-	fmt.Printf("v%s\n", config.Global.General.Version)
+	fmt.Println()
+	fmt.Print(` _           _ _     _  ____             __ _       
+| |__  _   _(_) | __| |/ ___|___  _ __  / _(_) __ _ 
+| '_ \| | | | | |/ _' | |   / _ \| '_ \| |_| |/ _' |
+| |_) | |_| | | | (_| | |__| (_) | | | |  _| | (_| |
+|_.__/ \__,_|_|_|\__,_|\____\___/|_| |_|_| |_|\__, |
+					       |___/ 
+`)
+	fmt.Printf("Application Version: v%s\n", config.Global.General.Version)
+	fmt.Println()
 	fmt.Println()
 	fmt.Printf("Containers:\n")
 	for container := range containers {
