@@ -14,10 +14,13 @@ func GetAllPackageBuilds(changed []parser.Result, packageDeps map[string][]strin
 
 	for len(packages) > 0 {
 		currentPack := packages[0]
-		result[ToHyphenCase(currentPack)] = true
-
 		// Deqeue current after adding to map.
 		packages = packages[1:]
+		// Prevent loop in the case of circular dependencies.
+		if result[ToHyphenCase(currentPack)] {
+			continue
+		}
+		result[ToHyphenCase(currentPack)] = true
 		// Append all reverse dependencies to packages queue.
 		packages = append(packages, packageDeps[ToHyphenCase(currentPack)]...)
 	}
