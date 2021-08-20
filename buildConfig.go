@@ -96,25 +96,37 @@ func main() {
 	fmt.Printf("Containers:\n")
 	for container := range containers {
 		fmt.Printf("--> %s\n", container)
-		spackEnv, err := repo.ParseSpackEnv(defaultEnvPath, filepath.Join(containersPath, container, "spack.yaml"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		for _, arch := range spackEnv.Spack.Config.Compiler.Target {
-			if arch == "x86_64_v3" {
-				output = append(output, result{
-					name:      container,
-					arch:      "linux/amd64",
-					container: container,
-				})
+		spackEnv, err := repo.ParseSpackEnv(
+			defaultEnvPath,
+			filepath.Join(containersPath,
+				string(container[0]),
+				container,
+				"spack.yaml",
+			),
+		)
+		if err == nil {
+			for _, arch := range spackEnv.Spack.Config.Compiler.Target {
+				if arch == "x86_64_v3" {
+					output = append(output, result{
+						name:      container,
+						arch:      "linux/amd64",
+						container: container,
+					})
+				}
+				if arch == "aarch64" {
+					output = append(output, result{
+						name:      container + "-" + "arm",
+						arch:      "linux/arm64",
+						container: container,
+					})
+				}
 			}
-			if arch == "aarch64" {
-				output = append(output, result{
-					name:      container + "-" + "arm",
-					arch:      "linux/arm64",
-					container: container,
-				})
-			}
+		} else {
+			output = append(output, result{
+				name:      container,
+				arch:      "linux/amd64",
+				container: container,
+			})
 		}
 	}
 
