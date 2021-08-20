@@ -1,13 +1,11 @@
 package repo
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	binoc "github.com/autamus/binoc/repo"
-	"gopkg.in/yaml.v2"
 )
 
 func IndexReverseDependencies(path, packagesPath string) (result map[string][]string, err error) {
@@ -26,11 +24,7 @@ func IndexReverseDependencies(path, packagesPath string) (result map[string][]st
 	return result, nil
 }
 
-type SpackEnv struct {
-	Specs []string `yaml:"specs"`
-}
-
-func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[string][]string, err error) {
+func IndexPackageContainerDeps(prefixPath, defaultEnvPath, containersPath string) (result map[string][]string, err error) {
 	// Initialize empty reverse depencency map
 	result = make(map[string][]string)
 
@@ -42,26 +36,15 @@ func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[st
 		if match {
 			// Find container name
 			containerName := filepath.Base(filepath.Dir(path))
-			// Create a spack struct.
-			container := struct {
-				Spack SpackEnv `yaml:"spack"`
-			}{}
-
-			// Read file contents into a string.
-			content, err := ioutil.ReadFile(path)
-			if err != nil {
-				return err
-			}
-
-			// Unmarshal spack.yaml environment file into a struct.
-			err = yaml.Unmarshal([]byte(content), &container)
+			// Parse a spack environment into a struct.
+			container, err := ParseSpackEnv(defaultEnvPath, path)
 			if err != nil {
 				return err
 			}
 
 			// Add container as dependency of package.
 			for _, spec := range container.Spack.Specs {
-				// Record the end of the depedency name versus version/variant info.
+				// Record the end of the dependency name versus version/variant info.
 				end := strings.IndexFunc(spec, versend)
 				if end > 0 {
 					spec = spec[:end]
@@ -73,14 +56,4 @@ func IndexPackageContainerDeps(prefixPath, containersPath string) (result map[st
 	})
 
 	return result, err
-}
-
-// versend returns true at the end of the name of a dependency
-func versend(input rune) bool {
-	for _, c := range []rune{'@', '~', '+', '%'} {
-		if input == c {
-			return true
-		}
-	}
-	return false
 }

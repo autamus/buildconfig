@@ -25,7 +25,8 @@ type packages struct {
 }
 
 type containers struct {
-	Path string
+	Path           string
+	DefaultEnvPath string
 }
 
 type repository struct {
@@ -54,6 +55,7 @@ func init() {
 func defaultConfig() {
 	Global.General.Version = "0.1.2"
 	Global.Containers.Path = "containers/"
+	Global.Containers.DefaultEnvPath = "default.yaml"
 	Global.Packages.Path = "spack/"
 	Global.Repository.Path = "."
 	Global.Repository.DefaultBranch = "main"
