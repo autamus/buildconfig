@@ -15,9 +15,9 @@ import (
 )
 
 type result struct {
-	name      string
-	arch      string
-	container string
+	Name      string `json:"name"`
+	Arch      string `json:"arch"`
+	Container string `json:"container"`
 }
 
 func main() {
@@ -108,24 +108,24 @@ func main() {
 			for _, arch := range spackEnv.Spack.Config.Compiler.Target {
 				if arch == "x86_64_v3" {
 					output = append(output, result{
-						name:      container,
-						arch:      "linux/amd64",
-						container: container,
+						Name:      container,
+						Arch:      "linux/amd64",
+						Container: container,
 					})
 				}
 				if arch == "aarch64" {
 					output = append(output, result{
-						name:      container + "-" + "arm",
-						arch:      "linux/arm64",
-						container: container,
+						Name:      container + "-" + "arm",
+						Arch:      "linux/arm64",
+						Container: container,
 					})
 				}
 			}
 		} else {
 			output = append(output, result{
-				name:      container,
-				arch:      "linux/amd64",
-				container: container,
+				Name:      container,
+				Arch:      "linux/amd64",
+				Container: container,
 			})
 		}
 	}
