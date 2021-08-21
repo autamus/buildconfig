@@ -79,7 +79,8 @@ func main() {
 	}
 
 	// Initialize list for keys of containers
-	output := make([]result, 0, len(containers))
+	buildOutput := make([]result, 0, len(containers))
+	pubOutput := make([]result, 0, len(containers))
 
 	// Print BuildConfig Report
 	fmt.Println()
@@ -105,24 +106,37 @@ func main() {
 			),
 		)
 		if err == nil {
+			pubArches := []string{}
 			for _, arch := range spackEnv.Spack.Config.Compiler.Target {
 				if arch == "x86_64_v3" {
-					output = append(output, result{
+					buildOutput = append(buildOutput, result{
 						Name:      container,
 						Arch:      "linux/amd64",
 						Container: container,
 					})
+					pubArches = append(pubArches, "linux/amd64")
 				}
 				if arch == "aarch64" {
-					output = append(output, result{
+					buildOutput = append(buildOutput, result{
 						Name:      container + "-" + "arm",
 						Arch:      "linux/arm64",
 						Container: container,
 					})
+					pubArches = append(pubArches, "linux/arm64")
 				}
 			}
+			pubOutput = append(pubOutput, result{
+				Name:      container,
+				Arch:      strings.Join(pubArches, ","),
+				Container: container,
+			})
 		} else {
-			output = append(output, result{
+			buildOutput = append(buildOutput, result{
+				Name:      container,
+				Arch:      "linux/amd64",
+				Container: container,
+			})
+			pubOutput = append(pubOutput, result{
 				Name:      container,
 				Arch:      "linux/amd64",
 				Container: container,
@@ -161,7 +175,9 @@ func main() {
 		}
 	}
 	// Convert results list into JSON
-	jsonOutput, _ := json.Marshal(output)
+	buildJson, _ := json.Marshal(buildOutput)
+	pubJson, _ := json.Marshal(pubOutput)
 	fmt.Println()
-	fmt.Printf("::set-output name=matrix::%s\n", string(jsonOutput))
+	fmt.Printf("::set-output name=build_matrix::%s\n", string(buildJson))
+	fmt.Printf("::set-output name=publish_matrix::%s\n", string(pubJson))
 }
