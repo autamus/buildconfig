@@ -12,7 +12,7 @@ import (
 func GetChangedPackages(parser parser.Repo, prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
 	for _, path := range filepaths {
 		if strings.Contains(path, packagesPath) {
-			result, err := parser.Parse(filepath.Join(prefixPath, path))
+			result, err := parser.Parse(filepath.Join(prefixPath, path), false)
 			if err != nil && err.Error() != "not a valid package format" {
 				return packages, err
 			}
@@ -29,7 +29,7 @@ func FindAndParse(parser parser.Repo, path, name string) (output parser.Result, 
 	err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		dir := strings.ToLower(filepath.Base(filepath.Dir(path)))
 		if dir == strings.ToLower(name) {
-			result, err := parser.Parse(path)
+			result, err := parser.Parse(path, false)
 			if err != nil && err.Error() != "not a valid package format" {
 				return err
 			}
