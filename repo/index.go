@@ -8,11 +8,11 @@ import (
 	binoc "github.com/autamus/binoc/repo"
 )
 
-func IndexReverseDependencies(path, packagesPath string) (result map[string][]string, err error) {
+func IndexReverseDependencies(parser binoc.Repo, path, packagesPath string) (result map[string][]string, err error) {
 	// Iterate through and parse packages
 	output := make(chan binoc.Result, 20)
 	result = make(map[string][]string)
-	go binoc.ParseDir(filepath.Join(path, packagesPath), output)
+	go parser.ParseDir(filepath.Join(path, packagesPath), output)
 
 	// Construct reverse dependency map by mapping dependencies to the list of
 	// apps that depend on them.

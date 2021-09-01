@@ -21,15 +21,20 @@ type result struct {
 }
 
 func main() {
-	// Initialize parser functionality
-	parser.Init(strings.Split(config.Global.Parsers.Loaded, ","))
-
 	// Set initial values for Repository
 	path := config.Global.Repository.Path
 	packagesPath := config.Global.Packages.Path
 	containersPath := config.Global.Containers.Path
 	defaultEnvPath := config.Global.Containers.DefaultEnvPath
 	mainBranch := config.Global.Repository.DefaultBranch
+
+	// Initialize parser functionality
+	parser, err := parser.Init(path,
+		strings.Split(config.Global.Parsers.Loaded, ","),
+		&parser.RepoGitOptions{})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Check if the current run is a PR
 	prVal, prExists := os.LookupEnv("GITHUB_EVENT_NAME")
@@ -53,14 +58,14 @@ func main() {
 	}
 
 	// Get a list of all of the packages modified in the commit.
-	changedPackages, err := repo.GetChangedPackages(path, packagesPath, filepaths)
+	changedPackages, err := repo.GetChangedPackages(parser, path, packagesPath, filepaths)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if len(changedPackages) > 0 {
 		// Build a map of packages (values) that rely on a package (key).
-		reversePackageDeps, err := repo.IndexReverseDependencies(path, packagesPath)
+		reversePackageDeps, err := repo.IndexReverseDependencies(parser, path, packagesPath)
 		if err != nil {
 			log.Fatal(err)
 		}

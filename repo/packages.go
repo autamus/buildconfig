@@ -9,7 +9,7 @@ import (
 )
 
 // GetChangedPackages returns a slice of parser.Results from the files changed.
-func GetChangedPackages(prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
+func GetChangedPackages(parser parser.Repo, prefixPath, packagesPath string, filepaths []string) (packages []parser.Result, err error) {
 	for _, path := range filepaths {
 		if strings.Contains(path, packagesPath) {
 			result, err := parser.Parse(filepath.Join(prefixPath, path))
@@ -25,7 +25,7 @@ func GetChangedPackages(prefixPath, packagesPath string, filepaths []string) (pa
 }
 
 // FindAndParse attempts to find a package in the repository and parse it.
-func FindAndParse(path, name string) (output parser.Result, err error) {
+func FindAndParse(parser parser.Repo, path, name string) (output parser.Result, err error) {
 	err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		dir := strings.ToLower(filepath.Base(filepath.Dir(path)))
 		if dir == strings.ToLower(name) {
