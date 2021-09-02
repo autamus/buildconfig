@@ -70,10 +70,10 @@ github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPdPJAN/hZIm0C4OItdklCFmMRWYpio=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
 github.com/aryann/difflib v0.0.0-20170710044230-e206f873d14a/go.mod h1:DAHtR1m6lCRdSC2Tm3DSWRPvIPr6xNKyeHdqDQSQT+A=
-github.com/autamus/binoc v0.4.5 h1:cewuXoTutv5hdeyzEPDs1v36rbYweB6iajzyy5h4ySc=
-github.com/autamus/binoc v0.4.5/go.mod h1:Svc66wD1GPZbYS7JP9wjFaoZerk3H8OS7vFsS7UIVUY=
-github.com/autamus/go-parspack v0.2.6 h1:5uwkY8gHx1Mn8BqK/3Jh/G5Zhj9VMfTI6qO0jo3SQZo=
-github.com/autamus/go-parspack v0.2.6/go.mod h1:eOgRsyaj7Ctq6HndHaUPjkqf9bGkeehFyr9sfMljeYY=
+github.com/autamus/binoc v0.4.6 h1:0gICjTxzqLHEo43AtIJ1XSj/Ohc5eWFcUlxfzkbK0d0=
+github.com/autamus/binoc v0.4.6/go.mod h1:Hx4Art6eWC71KvfaaeQn+NB1cQYJUHbbafXx+pQcZRg=
+github.com/autamus/go-parspack v0.2.7 h1:nfRXizlXG/y7OHqh1omPWe1h/q0XHys29+XOb8gZMww=
+github.com/autamus/go-parspack v0.2.7/go.mod h1:eOgRsyaj7Ctq6HndHaUPjkqf9bGkeehFyr9sfMljeYY=
 github.com/aws/aws-lambda-go v1.13.3/go.mod h1:4UKl9IzQMoD+QF79YdCuzCwp8VbmG4VAQwij/eHl5CU=
 github.com/aws/aws-sdk-go v1.27.0/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go-v2 v0.18.0/go.mod h1:JWVYvqSMppoMJC0x5wdwiImzgXTI9FuZwxzkQq9wy+g=
